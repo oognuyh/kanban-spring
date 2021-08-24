@@ -39,4 +39,10 @@ public class VerifiedResult {
                 .collect(Collectors.toList()))
             .build();
     }
+
+    public static VerifiedResult ERROR() {
+        return VerifiedResult.builder()
+            .isSuccessful(false)
+            .build();
+    }
 }

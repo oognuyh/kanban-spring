@@ -14,6 +14,7 @@ public class ReactiveAuthenticationManagerImpl implements ReactiveAuthentication
     public Mono<Authentication> authenticate(Authentication authentication) {
         return Mono.just(authentication.getCredentials().toString())
             .map(JwtUtils::verify)
+            .onErrorReturn(VerifiedResult.ERROR())
             .filter(verifiedResult -> verifiedResult.isSuccessful())
             .switchIfEmpty(Mono.empty())
             .map(verifiedResult -> new UsernamePasswordAuthenticationToken(verifiedResult.getEmail(), null, verifiedResult.getAuthorities()));
