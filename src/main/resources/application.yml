@@ -4,3 +4,6 @@ spring:
 
 server:
     port: 9999
+
+client:
+    redirectUri: http://localhost:9998/oauth2-process

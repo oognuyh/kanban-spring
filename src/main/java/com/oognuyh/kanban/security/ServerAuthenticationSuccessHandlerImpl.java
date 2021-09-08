@@ -8,18 +8,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.server.WebFilterExchange;
-import org.springframework.security.web.server.authentication.ServerAuthenticationSuccessHandler;
+import org.springframework.security.web.server.authentication.WebFilterChainServerAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import reactor.core.publisher.Mono;
 
-/*
-    Add JWT after a successful login
- */
 @Component
-public class ServerAuthenticationSuccessHandlerImpl implements ServerAuthenticationSuccessHandler {
+public class ServerAuthenticationSuccessHandlerImpl extends WebFilterChainServerAuthenticationSuccessHandler {
     @Value("${client.redirectUri}")
     private String redirectUri;
 
@@ -35,7 +32,7 @@ public class ServerAuthenticationSuccessHandlerImpl implements ServerAuthenticat
 
         String authToken = JwtUtils.generateAuthToken(email, authorities);
         String refreshToken = JwtUtils.generateRefreshToken(email, authorities);
-        
+
         exchange.getResponse().setStatusCode(HttpStatus.MOVED_PERMANENTLY);
         try {
             URI uri = UriComponentsBuilder.fromUriString(redirectUri)
@@ -43,7 +40,7 @@ public class ServerAuthenticationSuccessHandlerImpl implements ServerAuthenticat
                 .queryParam("refreshToken", refreshToken)
                 .build()
                 .toUri();
-
+            
             headers.setLocation(uri);
         } catch (Exception e) {
             throw new RuntimeException();
