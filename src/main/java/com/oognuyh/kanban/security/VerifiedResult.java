@@ -14,26 +14,26 @@ import lombok.Data;
 @Builder
 public class VerifiedResult {
     
-    private String email;
-    
+    private String id;
+
     private boolean isSuccessful;
 
     private Collection<GrantedAuthority> authorities;
 
-    public static VerifiedResult OK(String email, String[] authorities) {
+    public static VerifiedResult OK(String id, String[] authorities) {
         return VerifiedResult.builder()
             .isSuccessful(true)
-            .email(email)
+            .id(id)
             .authorities(Arrays.stream(authorities)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList()))
             .build();
     }
 
-    public static VerifiedResult ERROR(String email, String[] authorities) {
+    public static VerifiedResult ERROR(String id, String[] authorities) {
         return VerifiedResult.builder()
             .isSuccessful(false)
-            .email(email)
+            .id(id)
             .authorities(Arrays.stream(authorities)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList()))

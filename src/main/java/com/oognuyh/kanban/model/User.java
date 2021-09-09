@@ -29,6 +29,8 @@ public class User {
 
     private String imageUrl;
 
+    private String provider;
+
     private List<Role> roles;
 
     @CreatedDate

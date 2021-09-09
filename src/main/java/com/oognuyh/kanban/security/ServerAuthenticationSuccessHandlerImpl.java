@@ -25,13 +25,14 @@ public class ServerAuthenticationSuccessHandlerImpl extends WebFilterChainServer
         ServerWebExchange exchange = webFilterExchange.getExchange();
         HttpHeaders headers = exchange.getResponse().getHeaders();
         OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
-        String email = oAuth2AuthenticationToken.getPrincipal().getAttributes().get("email").toString();
+
+        String id = oAuth2AuthenticationToken.getPrincipal().getAttributes().get("user_id").toString();
         String[] authorities = oAuth2AuthenticationToken.getAuthorities().stream()
             .map(authority -> authority.getAuthority())
             .toArray(String[]::new);
 
-        String authToken = JwtUtils.generateAuthToken(email, authorities);
-        String refreshToken = JwtUtils.generateRefreshToken(email, authorities);
+        String authToken = JwtUtils.generateAuthToken(id, authorities);
+        String refreshToken = JwtUtils.generateRefreshToken(id, authorities);
 
         exchange.getResponse().setStatusCode(HttpStatus.MOVED_PERMANENTLY);
         try {

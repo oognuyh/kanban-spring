@@ -17,6 +17,6 @@ public class ReactiveAuthenticationManagerImpl implements ReactiveAuthentication
             .onErrorReturn(VerifiedResult.ERROR())
             .filter(verifiedResult -> verifiedResult.isSuccessful())
             .switchIfEmpty(Mono.empty())
-            .map(verifiedResult -> new UsernamePasswordAuthenticationToken(verifiedResult.getEmail(), null, verifiedResult.getAuthorities()));
+            .map(verifiedResult -> new UsernamePasswordAuthenticationToken(verifiedResult.getId(), null, verifiedResult.getAuthorities()));
     }
 }

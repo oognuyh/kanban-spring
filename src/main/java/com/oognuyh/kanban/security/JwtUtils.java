@@ -16,17 +16,17 @@ public class JwtUtils {
     public static final String AUTH_TOKEN_HEADER = "x-auth-token";
     public static final String PREFIX = "Bearer ";
 
-    public static String generateAuthToken(String email, String[] authorities) {
+    public static String generateAuthToken(String id, String[] authorities) {
         return JWT.create()
-            .withSubject(email)
+            .withSubject(id)
             .withClaim("exp", Instant.now().getEpochSecond() + EXPIRATION_TIME)
             .withArrayClaim("authorities", authorities)
             .sign(ALGORITHM);
     }
 
-    public static String generateRefreshToken(String email, String[] authorities) {
+    public static String generateRefreshToken(String id, String[] authorities) {
         return JWT.create()
-            .withSubject(email)
+            .withSubject(id)
             .withClaim("exp", Instant.now().getEpochSecond() + REFRESH_TIME)
             .withArrayClaim("authorities", authorities)
             .sign(ALGORITHM);

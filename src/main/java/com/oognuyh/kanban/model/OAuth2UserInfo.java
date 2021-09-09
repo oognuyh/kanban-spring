@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.oognuyh.kanban.security.OAuth2Provider;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -21,10 +23,12 @@ public class OAuth2UserInfo {
 
     private String imageUrl;
 
+    private String provider;
+
     public static OAuth2UserInfo of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
-        if (registrationId.equals("google")) {
+        if (registrationId.equalsIgnoreCase(OAuth2Provider.GOOGLE)) {
             return withGoogle(userNameAttributeName, attributes);
-        } else if (registrationId.equals("github")) {
+        } else if (registrationId.equalsIgnoreCase(OAuth2Provider.GITHUB)) {
             return withGithub(userNameAttributeName, attributes);
         } else {
             return null;
@@ -38,6 +42,7 @@ public class OAuth2UserInfo {
             .name((String) attributes.get("name"))
             .email((String) attributes.get("email"))
             .imageUrl((String) attributes.get("avatar_url"))
+            .provider(OAuth2Provider.GITHUB)
             .build();
     }
 
@@ -48,6 +53,7 @@ public class OAuth2UserInfo {
             .name((String) attributes.get("name"))
             .email((String) attributes.get("email"))
             .imageUrl((String) attributes.get("picture"))
+            .provider(OAuth2Provider.GOOGLE)
             .build();
     }
 
@@ -58,6 +64,7 @@ public class OAuth2UserInfo {
             .roles(Arrays.stream(new Role[] {Role.USER})
                 .collect(Collectors.toList()))
             .imageUrl(imageUrl)
+            .provider(provider)
             .build();
     }
 }
