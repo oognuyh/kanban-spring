@@ -1,6 +1,7 @@
 package com.oognuyh.kanban.config;
 
 import com.oognuyh.kanban.web.AuthHandler;
+import com.oognuyh.kanban.web.BoardHandler;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RouterConfig {
     private final AuthHandler authHandler;
+    private final BoardHandler boardHandler;
 
     @Bean
     public RouterFunction<ServerResponse> authRoutes() {
@@ -22,6 +24,19 @@ public class RouterConfig {
             .nest(RequestPredicates.path("/api/v1/auth"), RouterFunctions.route()
                 .POST("/refreshTokens", authHandler::refreshTokens)
                 .GET("/user", authHandler::getUser)
+                .build());
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> boardRoutes() {
+        return RouterFunctions
+            .nest(RequestPredicates.path("/api/v1/board"), RouterFunctions.route()
+                .GET("", boardHandler::findAll)
+                .GET("/mine", boardHandler::findByUserId)
+                .GET("/{id}", boardHandler::findById)
+                .PUT("", boardHandler::update)
+                .POST("", boardHandler::createNew)
+                .DELETE("/{id}", boardHandler::deleteById)
                 .build());
     }
 }
