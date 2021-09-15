@@ -6,6 +6,10 @@ module.exports = {
         'vuetify'
     ],
     rules: {
-        'vuetify/no-deprecated-classes': 'error'
+        'vuetify/no-deprecated-classes': 'error',
+        "vue/valid-v-model": "off",
+    },
+    parserOptions: {
+        ecmaVersion: 2017
     }
 }
