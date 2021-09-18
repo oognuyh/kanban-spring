@@ -1,4 +1,4 @@
-package com.oognuyh.kanban.model;
+package com.oognuyh.kanban.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

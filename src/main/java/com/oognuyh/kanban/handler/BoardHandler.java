@@ -1,7 +1,9 @@
-package com.oognuyh.kanban.web;
+package com.oognuyh.kanban.handler;
 
 import com.oognuyh.kanban.model.Board;
+import com.oognuyh.kanban.model.Task;
 import com.oognuyh.kanban.service.BoardService;
+import com.oognuyh.kanban.validation.ValidatorUtils;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
@@ -17,10 +19,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class BoardHandler {
     private final BoardService boardService;
-
-    public Mono<ServerResponse> findAll(ServerRequest request) {
-        return ServerResponse.ok().body(boardService.findAll(), Board.class);
-    }
+    private final ValidatorUtils validatorUtils;
 
     public Mono<ServerResponse> findByUserId(ServerRequest request) {
         Flux<Board> boards = ReactiveSecurityContextHolder.getContext()
@@ -48,15 +47,25 @@ public class BoardHandler {
 
     public Mono<ServerResponse> update(ServerRequest request) {
         return request.bodyToMono(Board.class).log()
+            .doOnNext(validatorUtils::validate)
             .flatMap(boardService::saveOrUpdate)
             .flatMap(board -> ServerResponse.ok().bodyValue(board))
-            .switchIfEmpty(ServerResponse.badRequest().build());
+            .switchIfEmpty(ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 
     public Mono<ServerResponse> deleteById(ServerRequest request) {
         String id = request.pathVariable("id");
 
         return ServerResponse.ok()
-            .build(boardService.deleteById(id));
+            .build(boardService.deleteById(id))
+            .onErrorResume(error -> ServerResponse.notFound().build());
+    }
+
+    public Mono<ServerResponse> findTasksByUserId(ServerRequest request) {
+        Flux<Task> tasks = ReactiveSecurityContextHolder.getContext()
+            .map(context -> context.getAuthentication().getName())
+            .flatMapMany(boardService::findTasksByUserId);
+
+        return ServerResponse.ok().body(tasks, Task.class);
     }
 }

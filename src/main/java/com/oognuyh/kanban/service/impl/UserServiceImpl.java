@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.oognuyh.kanban.model.OAuth2UserInfo;
-import com.oognuyh.kanban.model.Tokens;
 import com.oognuyh.kanban.model.User;
 import com.oognuyh.kanban.repository.UserRepository;
 import com.oognuyh.kanban.security.JwtUtils;
+import com.oognuyh.kanban.security.OAuth2UserInfo;
+import com.oognuyh.kanban.security.Tokens;
 import com.oognuyh.kanban.security.VerifiedResult;
 import com.oognuyh.kanban.service.UserService;
 
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
-@Service
+@Service("userService")
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -70,10 +70,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<User> saveOrUpdate(User user) {
         return userRepository.findByEmailAndProvider(user.getEmail(), user.getProvider())
-            .defaultIfEmpty(user)
+            .switchIfEmpty(userRepository.save(user))
             .flatMap(entity -> {
                 entity.update(user);
-
                 return userRepository.save(entity);
             });
     }

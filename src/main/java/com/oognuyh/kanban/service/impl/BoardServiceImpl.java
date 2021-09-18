@@ -1,6 +1,7 @@
 package com.oognuyh.kanban.service.impl;
 
 import com.oognuyh.kanban.model.Board;
+import com.oognuyh.kanban.model.Task;
 import com.oognuyh.kanban.repository.BoardRepository;
 import com.oognuyh.kanban.service.BoardService;
 
@@ -14,10 +15,6 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
-
-    public Flux<Board> findAll() {
-        return boardRepository.findAll();
-    }
 
     @Override
     public Flux<Board> findByUserId(String userId) {
@@ -42,5 +39,13 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Mono<Board> createNew(String userId) {
         return boardRepository.save(Board.init(userId));
+    }
+
+    @Override
+    public Flux<Task> findTasksByUserId(String userId) {
+        return boardRepository.findByUserId(userId).log()
+            .map(Board::getColumns)
+            .flatMap(Flux::fromIterable)
+            .flatMap(column -> Flux.fromIterable(column.getTasks())).log();
     }
 }

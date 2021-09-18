@@ -1,7 +1,7 @@
-package com.oognuyh.kanban.web;
+package com.oognuyh.kanban.handler;
 
-import com.oognuyh.kanban.model.Tokens;
 import com.oognuyh.kanban.security.JwtUtils;
+import com.oognuyh.kanban.security.Tokens;
 import com.oognuyh.kanban.service.UserService;
 
 import org.springframework.http.HttpStatus;

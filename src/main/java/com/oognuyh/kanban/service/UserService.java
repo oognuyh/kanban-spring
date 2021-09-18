@@ -1,7 +1,7 @@
 package com.oognuyh.kanban.service;
 
-import com.oognuyh.kanban.model.Tokens;
 import com.oognuyh.kanban.model.User;
+import com.oognuyh.kanban.security.Tokens;
 
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.ReactiveOAuth2UserService;

@@ -1,10 +1,10 @@
-package com.oognuyh.kanban.model;
+package com.oognuyh.kanban.security;
 
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.oognuyh.kanban.security.OAuth2Provider;
+import com.oognuyh.kanban.model.User;
 
 import lombok.Builder;
 import lombok.Data;
