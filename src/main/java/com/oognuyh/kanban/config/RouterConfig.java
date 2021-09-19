@@ -1,7 +1,7 @@
 package com.oognuyh.kanban.config;
 
-import com.oognuyh.kanban.web.AuthHandler;
-import com.oognuyh.kanban.web.BoardHandler;
+import com.oognuyh.kanban.handler.AuthHandler;
+import com.oognuyh.kanban.handler.BoardHandler;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,8 +31,8 @@ public class RouterConfig {
     public RouterFunction<ServerResponse> boardRoutes() {
         return RouterFunctions
             .nest(RequestPredicates.path("/api/v1/board"), RouterFunctions.route()
-                .GET("", boardHandler::findAll)
                 .GET("/mine", boardHandler::findByUserId)
+                .GET("/tasks", boardHandler::findTasksByUserId)
                 .GET("/{id}", boardHandler::findById)
                 .PUT("", boardHandler::update)
                 .POST("", boardHandler::createNew)

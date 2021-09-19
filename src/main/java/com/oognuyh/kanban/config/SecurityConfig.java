@@ -26,9 +26,9 @@ public class SecurityConfig {
     SecurityWebFilterChain springSecurityWebFilterChain(ServerHttpSecurity http) {
         return http
             .authorizeExchange()
-                .pathMatchers("/oauth2/**")
+                .pathMatchers("/oauth2/**", "/api/v1/auth/refreshTokens")
                 .permitAll()
-            .anyExchange()
+                .anyExchange()
                 .authenticated()
             .and()
             .securityContextRepository(serverSecurityContextRepository)
@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
-            .build();
+                .logout().disable()
+            .build(); 
     }
 }
