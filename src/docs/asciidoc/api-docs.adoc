@@ -1,0 +1,222 @@
+= Kanban Board API Guide
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+
+== SUMMARY
+|===
+| GET | /api/v1/auth/user | 인증된 사용자 정보 조회 
+| POST | /api/v1/auth/refreshTokens | 인증 토큰 갱신 
+| GET | /api/v1/board/mine | 인증된 사용자의 전체 보드 조회 
+| GET | /api/v1/board/tasks | 사용자의 전체 일 조회 
+| GET | /api/v1/board/{id} | 특정 보드 조회 
+| POST | /api/v1/board | 새로운 초기 보드 생성 
+| PUT | /api/v1/board | 보드 정보 갱신 
+| DELETE | /api/v1/board/{id} | 특정 보드 삭제 
+|===
+
+== 공통 상태 코드
+|===
+| 200 | OK 
+| 400 | Bad Request 
+| 401 | Unauthorized 
+| 404 | Notfound 
+| 500 | Internal server error 
+|===
+
+== 인증
+=== 인증된 사용자 정보 조회 
+토큰을 통해 인증된 사용자의 정보를 조회합니다.
+
+----
+GET /api/v1/auth/user
+----
+
+==== Request headers
+include::{snippets}/get-user/request-headers.adoc[]
+
+==== Response headers 
+include::{snippets}/get-user/response-headers.adoc[]
+
+==== Response fields
+include::{snippets}/get-user/response-fields.adoc[]
+
+==== Example
+- Request +
+include::{snippets}/get-user/http-request.adoc[]
+- Response +
+include::{snippets}/get-user/http-response.adoc[]
+
+=== 인증 토큰 갱신
+리프레시 토큰을 사용해 토큰을 갱신합니다.
+
+----
+POST /api/v1/auth/refreshTokens
+----
+
+==== Request headers
+include::{snippets}/refresh-tokens/request-headers.adoc[]
+
+==== Request fields
+include::{snippets}/refresh-tokens/request-fields.adoc[]
+
+==== Response headers
+include::{snippets}/refresh-tokens/response-headers.adoc[]
+
+==== Example
+- Request +
+include::{snippets}/refresh-tokens/http-request.adoc[]
+- Response +
+include::{snippets}/refresh-tokens/http-response.adoc[]
+
+== 보드
+=== 인증된 사용자의 전체 보드 조회 
+토큰을 통해 인증된 사용자의 전체 보드 목록을 조회합니다.
+
+----
+GET /api/v1/board/mine
+----
+
+==== Request headers
+include::{snippets}/find-boards-by-user-id/request-headers.adoc[]
+
+==== Response fields
+include::{snippets}/find-boards-by-user-id/response-fields.adoc[]
+
+==== Example
+- Request +
+include::{snippets}/find-boards-by-user-id/http-request.adoc[]
+- Response +
+include::{snippets}/find-boards-by-user-id/http-response.adoc[]
+
+=== 사용자의 전체 일 조회 
+토큰을 통해 인증된 사용자의 전체 일 목록을 조회합니다
+
+----
+GET /api/v1/board/tasks
+----
+
+==== Request headers
+include::{snippets}/find-tasks-by-user-id/request-headers.adoc[]
+
+==== Response fields
+include::{snippets}/find-tasks-by-user-id/response-fields.adoc[]
+
+==== Example
+- Request +
+include::{snippets}/find-tasks-by-user-id/http-request.adoc[]
+- Response +
+include::{snippets}/find-tasks-by-user-id/http-response.adoc[]
+
+=== 특정 보드 조회 
+특정 보드의 정보를 조회합니다.
+
+----
+GET /api/v1/board/{id}
+----
+
+==== Request headers
+include::{snippets}/find-by-id/request-headers.adoc[]
+
+==== Path parameters
+include::{snippets}/find-by-id/path-parameters.adoc[]
+
+==== Response fields
+include::{snippets}/find-by-id/response-fields.adoc[]
+
+==== Example
+- Request +
+include::{snippets}/find-by-id/http-request.adoc[]
+- Response +
+include::{snippets}/find-by-id/http-response.adoc[]
+
+=== 새로운 초기 보드 생성
+4개의 컬럼, 4개의 태그를 가진 초기 보드를 생성합니다.
+
+----
+POST /api/v1/board
+----
+
+==== Request headers
+include::{snippets}/create-new-board/request-headers.adoc[]
+
+==== Response headers
+include::{snippets}/create-new-board/response-headers.adoc[]
+
+==== Response fields
+include::{snippets}/create-new-board/response-fields.adoc[]
+
+==== Example
+- Request +
+include::{snippets}/create-new-board/http-request.adoc[]
+- Response +
+include::{snippets}/create-new-board/http-response.adoc[]
+
+=== 보드 정보 갱신
+요청된 보드를 통해 보드의 정보를 갱신합니다.
+
+----
+POST /api/v1/board
+----
+
+==== Request headers
+include::{snippets}/update-board/request-headers.adoc[]
+
+==== Request fields
+include::{snippets}/update-board/request-fields.adoc[]
+
+==== Response headers
+include::{snippets}/update-board/response-headers.adoc[]
+
+==== Response fields
+include::{snippets}/update-board/response-fields.adoc[]
+
+==== Example
+- Request +
+include::{snippets}/update-board/http-request.adoc[]
+- Response +
+include::{snippets}/update-board/http-response.adoc[]
+
+==== Bad Request
+- 제약 조건 +
+|===
+| Field | Constraint 
+
+| board.title | 1<= length <= 20 
+| board.userId | Not Blank 
+| column.title | 1 <= length <= 20 
+| task.content | Not Blank 
+| task.userName | Not Blank 
+| task.createdAt | yyyy-MM-dd HH:mm
+| task.deadline | yyyy-MM-dd
+| tag.name | 1 <= length <= 10 
+| tag.color | hex/hexa
+| tag.textColor | white or black
+|===
+
+- Response Fields +
+include::{snippets}/update-invalid-board/response-fields.adoc[]
+
+- Example Response +
+include::{snippets}/update-invalid-board/http-response.adoc[]
+
+=== 특정 보드 삭제
+특정 보드를 삭제합니다.
+
+----
+DELETE /api/v1/board/{id}
+----
+
+==== Request headers
+include::{snippets}/delete-by-id/request-headers.adoc[]
+
+==== Path parameters
+include::{snippets}/delete-by-id/path-parameters.adoc[]
+
+==== Example
+- Request +
+include::{snippets}/delete-by-id/http-request.adoc[]
+- Response +
+include::{snippets}/delete-by-id/http-response.adoc[]

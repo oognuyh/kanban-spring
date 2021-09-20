@@ -26,7 +26,7 @@ public class SecurityConfig {
     SecurityWebFilterChain springSecurityWebFilterChain(ServerHttpSecurity http) {
         return http
             .authorizeExchange()
-                .pathMatchers("/oauth2/**", "/api/v1/auth/refreshTokens")
+                .pathMatchers("/oauth2/**", "/api/v1/auth/refreshTokens", "/docs/**")
                 .permitAll()
                 .anyExchange()
                 .authenticated()
