@@ -41,20 +41,22 @@ ext {
 }
 
 test {
-	useJUnitPlatform()
 	outputs.dir snippetsDir
+	useJUnitPlatform()
 }
 
 asciidoctor {
-    attributes 'snippets': snippetsDir 
+    attributes 'snippets': snippetsDir  
     inputs.dir snippetsDir 
-    dependsOn test
+	dependsOn test
+	doLast {
+		copy {
+			from "${asciidoctor.outputDir}"
+    	    into 'build/resources/main/docs'
+    	}
+	}
 }
 
 bootJar {
-    dependsOn asciidoctor
-    copy {
-        from "${asciidoctor.outputDir}"           
-		into 'src/main/resources/static/docs'
-    }
+    dependsOn asciidoctor   
 }
