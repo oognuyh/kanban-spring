@@ -52,7 +52,7 @@ asciidoctor {
 	doLast {
 		copy {
 			from "${asciidoctor.outputDir}"
-    	    into 'build/resources/main/docs'
+    	    into 'build/resources/main/static/docs'
     	}
 	}
 }
