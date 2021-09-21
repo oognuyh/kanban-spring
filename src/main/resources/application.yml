@@ -1,6 +1,9 @@
 spring:
     profiles:
         include: oauth2
+    data:
+        mongodb:
+            uri: mongodb://database:27017/kanban
 
 server:
     port: 9999

@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+    database:
+      container_name: database
+      image: mongo:latest
+      ports: 
+          - 27017:27017
+    
+    backend:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        ports:
+            - 9999:9999
+        restart: always
+        container_name: backend
+        depends_on:
+            - database
+        links:
+            - database
+        
+    frontend:
+      build:
+          context: frontend/
+          dockerfile: Dockerfile
+      ports:
+          - 9998:9998
+      restart: always
+      container_name: frontend
+      depends_on:
+          - backend
