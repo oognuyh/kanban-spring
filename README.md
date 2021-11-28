@@ -24,7 +24,7 @@ Webflux, Vue, Docker, Mongodb, Test, Spring REST docs에 대한 이해를 목표
 - Tool
     - Visual Studio Code
 
-## Systen architecture
+## System architecture
 ![kanban-arch](https://user-images.githubusercontent.com/48203569/134038605-ae0ac49b-3a99-4bff-8dcf-80f2d448e24d.png)  
 Spring Boot, MongoDB 그리고 Nginx를 통한 Vue.js 배포를 Docker를 활용해 컨테이너화하고 Docker Compose를 통해 다층 컨테이너 어플리케이션을 정의했습니다.  
 frontend에서 backend 호출 시 cors 문제를 해결하기 위해 proxy를 설정하였습니다.
